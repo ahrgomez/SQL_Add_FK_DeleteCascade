@@ -34,7 +34,7 @@ GO
 		insert into @tables_with_column_id
 		select object_id from sys.tables where name in (select table_name from  [INFORMATION_SCHEMA].[COLUMNS] where column_name = @table_column_id) and object_id <> @table_object_id
 
-		--Get's tables with a column id_Candidato without foreign_key
+		--Get's tables with the column_id without foreign_key
 		insert into @tables_with_column_id_without_foreign_key
 		select object_id, name from sys.tables where name in (select table_name from  [INFORMATION_SCHEMA].[COLUMNS] where column_name = @table_column_id) and object_id not in (select (case when parent_object_id = @table_object_id then referenced_object_id when referenced_object_id = @table_object_id then parent_object_id end) from sys.foreign_keys where parent_object_id = @table_object_id or referenced_object_id = @table_object_id) and object_id <> @table_object_id
 
