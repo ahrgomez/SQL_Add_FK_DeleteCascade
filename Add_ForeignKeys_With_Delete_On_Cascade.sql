@@ -7,12 +7,10 @@
 
 ---------------------------------------------------------
 
-DECLARE @bbdd_name varchar(max)
-set @bbdd_name = 'testfk'
-
-exec('use ' + @bbdd_name)
+use testfk
 GO
-		DECLARE @delete_referential_action_cascade int = 0
+		DECLARE @delete_referential_action_cascade int = 1
+		DECLARE @delete_referential_action_no_action int = 0
 
 		DECLARE @table_name varchar(max)
 		set @table_name = 'candidatos'
@@ -71,7 +69,7 @@ GO
 		
 			exec(@deleteOrpahns)
 
-			PRINT('Deleted ' + @count + ' orphans in table ' + @ctable_name)
+			PRINT('Deleted ' + convert(varchar, @count) + ' orphans in table ' + @ctable_name)
 
 			END
 
@@ -87,10 +85,10 @@ GO
 		CLOSE table_name_cursor;
 		DEALLOCATE table_name_cursor;
 
-		DECLARE @tables_with_foreign_keys_without_delete_cascade table(object_id int, foreign_key_name varchar(max));
+		DECLARE @tables_with_foreign_keys_without_delete_cascade table(table_name varchar(max), foreign_key_name varchar(max));
 
-		--insert into @tables_with_foreign_keys_without_delete_cascade
-		select (select name from sys.tables t where t.object_id = object_id) as tablename, name from sys.foreign_keys where referenced_object_id = @table_object_id and delete_referential_action = @delete_referential_action_cascade
+		insert into @tables_with_foreign_keys_without_delete_cascade
+		select (select name from sys.tables t where t.object_id = fk.parent_object_id) as tablename, name from sys.foreign_keys fk where referenced_object_id = @table_object_id and delete_referential_action = @delete_referential_action_no_action
 
 		DECLARE @cfk_name varchar(max)
 
@@ -115,6 +113,9 @@ GO
 			exec(@add_foreign_key_cascade)
 
 			PRINT('Added foreign key with delete on cascade for table ' + @ctable_name)
+
+			FETCH NEXT FROM no_cascade_cursor 
+			INTO @ctable_name, @cfk_name
 		END
 		CLOSE no_cascade_cursor;
 		DEALLOCATE no_cascade_cursor;
