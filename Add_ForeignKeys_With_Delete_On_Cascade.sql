@@ -7,16 +7,19 @@
 
 ---------------------------------------------------------
 
-use bbdd_name
+use cpBI_Estandar
 GO
+
+		SET NOCOUNT ON;
+		
 		DECLARE @delete_referential_action_cascade int = 1
 		DECLARE @delete_referential_action_no_action int = 0
 
 		DECLARE @table_name varchar(max)
-		set @table_name = 'table_name'
+		set @table_name = 'candidatos'
 
 		DECLARE @table_column_id varchar(max)
-		set @table_column_id = 'column_id_name'
+		set @table_column_id = 'id_candidato'
 
 		DECLARE @table_object_id int
 		set @table_object_id = (select object_id from sys.tables where name = @table_name)
@@ -119,3 +122,5 @@ GO
 		END
 		CLOSE no_cascade_cursor;
 		DEALLOCATE no_cascade_cursor;
+
+		SET NOCOUNT OFF;
