@@ -1,0 +1,1 @@
+Script for find child tables for the setted parent and creates foreign keys with delete on cascade deleting orphans items
