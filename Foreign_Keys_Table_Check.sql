@@ -7,7 +7,7 @@
 
 ---------------------------------------------------------
 
-use cpBI_Estandar
+use ###DATABASE_NAME###
 GO
 		SET NOCOUNT ON;
 
@@ -15,10 +15,10 @@ GO
 		DECLARE @delete_referential_action_no_action int = 0
 
 		DECLARE @table_name varchar(max)
-		set @table_name = 'candidatos'
+		set @table_name = '###TABLE_NAME###'
 
 		DECLARE @table_column_id varchar(max)
-		set @table_column_id = 'id_candidato'
+		set @table_column_id = '###COLUMN_NAME###'
 
 		DECLARE @table_object_id int
 		set @table_object_id = (select object_id from sys.tables where name = @table_name)
